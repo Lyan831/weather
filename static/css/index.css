@@ -9,7 +9,8 @@ hr {
 #nav {
     opacity: 0;
     height: 50px;
-    font-size: 2rem;
+    font-size: 1.6rem;
+    transition: all 0.4s;
 }
 
 #air-quality {
@@ -138,6 +139,10 @@ hr {
 @media (min-width: 500px) {
     #number {
         font-size: 8rem;
+    }
+
+    #nav {
+        font-size: 2rem;
     }
 
     #air-quality {
