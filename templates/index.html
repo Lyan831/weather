@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "css/weather.css" %}">
+    <link rel="stylesheet" href="{% static "css/index.css" %}">
+</head>
+<body>
+<div id="map" style="display: none"></div>
+<div class="container">
+    <!-- 当前位置 -->
+    <div id="nav" class="row main-block">
+        <div class="col-12 col-xs-12 no-vertical-padding">
+            <p id="pos" class="text-center">&nbsp;</p>
+        </div>
+    </div>
+    <!-- 气温以及天气 -->
+    <div class="row main-block">
+        <div class="col-12 col-xs-6 no-vertical-padding">
+            <div class="row">
+                <!-- 实时气温 -->
+                <div class="tmp-wea col-6 col-xs-6">
+                    <div id="tmp">
+                        <span id="number">&nbsp;&nbsp;</span>
+                        <span id="symbol">℃</span>
+                    </div>
+                </div>
+                <!-- 实时天气图标 -->
+                <div class="tmp-wea col-6 col-xs-6">
+                    {#                            <div class="icon sun-shower">#}
+                    {#                                <div class="cloud"></div>#}
+                    {#                                <div class="sun">#}
+                    {#                                  <div class="rays"></div>#}
+                    {#                                </div>#}
+                    {#                                <div class="rain"></div>#}
+                    {#                            </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 空气质量等 -->
+    <div id="air-quality" class="row main-block sub-part">
+        <div class="col-4 col-xs-4 center-block no-vertical-padding">
+            <div class="scale-hover">
+                <p id="pm25" class="text-center"></p>
+                <p class="text-center">PM2.5</p>
+            </div>
+        </div>
+        <div class="col-4 col-xs-4 center-block no-vertical-padding">
+            <div class="scale-hover">
+                <p id="pm10" class="text-center"></p>
+                <p class="text-center">PM10</p>
+            </div>
+        </div>
+        <div class="col-4 col-xs-4 center-block no-vertical-padding">
+            <div class="scale-hover">
+                <p id="aqi" class="text-center"></p>
+                <p class="text-center">AQI</p>
+            </div>
+        </div>
+    </div>
+    <!-- 折线图 -->
+    <div class="row main-block sub-part plot">
+        <div class="col-12 col-xs-12 center-block no-vertical-padding">
+            <div id="container-tmp" style="max-width:100%;height:200px"></div>
+        </div>
+    </div>
+    <div class="row main-block sub-part plot">
+        <div class="col-12 col-xs-12 center-block no-vertical-padding">
+            <div id="container-hum" style="max-width:100%;height:200px"></div>
+        </div>
+    </div>
+    <!-- 三日预报 -->
+    <div id="forecast" class="row main-block sub-part">
+        <div class="col-12 col-xs-12 center-block no-vertical-padding">
+            <!-- 今天 -->
+            <div class="row center-block">
+                <div class="col-12 center-block no-vertical-padding">
+                    <div class="forecast scale-hover">
+                        <p class="date text-left"></p>
+                        <p class="tmp-range text-right"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- 明天 -->
+            <div class="row center-block">
+                <div class="col-12 center-block no-vertical-padding">
+                    <div class="forecast scale-hover">
+                        <p class="date text-left"></p>
+                        <p class="tmp-range text-right"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- 后天 -->
+            <div class="row center-block">
+                <div class="col-12 center-block no-vertical-padding">
+                    <div class="forecast scale-hover">
+                        <p class="date text-left"></p>
+                        <p class="tmp-range text-right"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<!-- Highcharts -->
+<script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
+<script src="https://code.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+<script src="https://code.highcharts.com.cn/highcharts/modules/series-label.js"></script>
+<script src="https://code.highcharts.com.cn/highcharts/modules/oldie.js"></script>
+<script src="https://code.highcharts.com.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+<!-- 高德 JS API -->
+<script src="https://webapi.amap.com/loader.js"></script>
+
+<script type="module" src="{% static "js/map.js" %}"></script>
+<script type="module" src="{% static "js/functions.js" %}"></script>
+<script type="module" src="{% static "js/index.js" %}"></script>
+</body>
+</html>

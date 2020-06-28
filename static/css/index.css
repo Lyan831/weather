@@ -1,0 +1,151 @@
+* {
+    user-select: none;
+}
+
+hr {
+    margin: 0;
+}
+
+#nav {
+    opacity: 0;
+    height: 50px;
+    font-size: 2rem;
+}
+
+#air-quality {
+    height: 100px;
+    font-size: 2.5rem;
+    opacity: 0;
+}
+
+#pm25, #pm10, #aqi,
+#pm25 + p, #pm10 + p, #aqi + p {
+    margin-bottom: 0;
+}
+
+#pm25 + p, #pm10 + p, #aqi + p {
+    margin-top: -10px;
+    font-size: 0.7rem;
+}
+
+#air-quality > [class^="col"] > div,
+.forecast > p {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#tmp {
+    position: absolute;
+    top: -15%;
+    left: 20%;
+    opacity: 0;
+}
+
+#number {
+    transition: all 0.4s;
+    font-size: 6rem;
+}
+
+#symbol {
+    display: inline-block;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+#container-tmp,
+#container-hum {
+    border-radius: 15px;
+}
+
+#forecast {
+    opacity: 0;
+}
+
+.tmp-wea {
+    height: 200px;
+}
+
+.container {
+    /*background-color: rgb(174, 202, 253);*/
+    background: linear-gradient(cornflowerblue, rgb(174, 202, 253));
+    max-width: 600px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.main-block {
+    margin: 7px 0 7px 0;
+}
+
+.sub-part {
+    border-radius: 15px;
+    transition: all 0.4s;
+    background-color: rgb(128, 128, 128, 0.2);
+}
+
+.sub-part:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 1rem 0.2rem lightgray;
+}
+
+.plot {
+    opacity: 0;
+}
+
+.forecast {
+    height: 60px;
+    font-size: 1.4rem;
+}
+
+.date {
+    float: left;
+    margin-left: 5%;
+}
+
+.tmp-range {
+    float: right;
+    margin-right: 5%;
+}
+
+.no-vertical-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.scale-hover {
+    transition: all 0.4s;
+}
+
+.scale-hover:hover {
+    transform: scale(1.02);
+}
+
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+[class~="row"] > [class^="col"] {
+    width: 100%;
+}
+
+/*.highcharts-exporting-group {*/
+/*    visibility: hidden;*/
+/*}*/
+
+@media (min-width: 500px) {
+    #number {
+        font-size: 8rem;
+    }
+
+    #air-quality {
+        font-size: 3rem;
+    }
+
+    .forecast {
+        height: 75px;
+        font-size: 1.7rem;
+    }
+}
