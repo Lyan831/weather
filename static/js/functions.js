@@ -228,7 +228,7 @@ export function update(callback) {
     $.getJSON(
         'adcode',
         function (data) {
-            $('#pos').html(data.basic.province + '&nbsp;' + data.basic.city).text();
+            $('#pos').html(data.province + '&nbsp;' + data.city).text();
             let adcode = data.adcode;
             for (const callbackElement of callback) {
                 callbackElement(adcode);
