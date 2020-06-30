@@ -132,10 +132,6 @@ hr {
     width: 100%;
 }
 
-/*.highcharts-exporting-group {*/
-/*    visibility: hidden;*/
-/*}*/
-
 @media (min-width: 500px) {
     #number {
         font-size: 8rem;

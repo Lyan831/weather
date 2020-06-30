@@ -130,33 +130,34 @@ function makePlot(dews, hums, timeStart) {
     });
 }
 
-export function nowWeather(adcode) {
+function nowWeather(lngLat) {
     $.getJSON(
         url + 'weather/now/',
         {
-            location: adcode
+            location: lngLat
         },
         function (data) {
             if (data.status === 'ok') {
+                $('#pos').html(data.basic.parent_city + '&nbsp;' + data.basic.location).text();
                 $('#number').text(data.now.tmp);
                 $('#nav, #tmp').animate({
                     opacity: '1.0'
                 });
             } else {
-                nowWeather(adcode);
+                setTimeout(nowWeather, 1000, lngLat);
             }
         }
     );
 }
 
-export function nowAirQuality(adcode) {
+function nowAirQuality(adcode) {
     $.getJSON(
         url + 'air_quality/now/',
         {
             location: adcode
         },
         function (data) {
-            if (data.status == 'ok') {
+            if (data.status === 'ok') {
                 $('#pm25').text(data.air_now_city.pm25);
                 $('#pm10').text(data.air_now_city.pm10);
                 $('#aqi').text(data.air_now_city.aqi);
@@ -164,20 +165,20 @@ export function nowAirQuality(adcode) {
                     opacity: 1.0
                 });
             } else {
-                nowAirQuality();
+                setTimeout(nowAirQuality, 1000, adcode);
             }
         }
     );
 }
 
-export function forecastWeather(adcode) {
+function forecastWeather(lngLat) {
     $.getJSON(
         url + 'weather/forecast/',
         {
-            location: adcode
+            location: lngLat
         },
         function (data) {
-            if (data.status == 'ok') {
+            if (data.status === 'ok') {
                 let forecast = $('.forecast');
                 let daily = data.daily_forecast;
                 for (let i = 0; i < forecast.length; i++) {
@@ -196,20 +197,20 @@ export function forecastWeather(adcode) {
                     opacity: 1.0
                 });
             } else {
-                nowWeather(adcode);
+                setTimeout(forecastWeather, 1000, lngLat);
             }
         }
     );
 }
 
-export function hourlyWeather(adcode) {
+function hourlyWeather(lngLat) {
     $.getJSON(
         url + 'weather/hourly/',
         {
-            location: adcode
+            location: lngLat
         },
         function (data) {
-            if (data.status == 'ok') {
+            if (data.status === 'ok') {
                 let hourly = data.hourly;
                 let dews = [], hums = [], timeStart = new Date(hourly[0].time).getTime();
                 for (const detail of hourly) {
@@ -218,21 +219,14 @@ export function hourlyWeather(adcode) {
                 }
                 makePlot(dews, hums, timeStart);
             } else {
-                hourlyWeather(adcode);
+                setTimeout(hourlyWeather, 1000, lngLat);
             }
         }
     );
 }
 
-export function update(callback) {
-    $.getJSON(
-        'adcode',
-        function (data) {
-            $('#pos').html(data.province + '&nbsp;' + data.city).text();
-            let adcode = data.adcode;
-            for (const callbackElement of callback) {
-                callbackElement(adcode);
-            }
-        }
-    )
+function update(lngLat ,callback) {
+    for (const callbackElement of callback) {
+        callbackElement(lngLat);
+    }
 }

@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static "css/weather.css" %}">
     <link rel="stylesheet" href="{% static "css/index.css" %}">
 </head>
@@ -111,12 +110,8 @@
 </div>
 <!-- Bootstrap -->
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- Highcharts -->
 <script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
 <script src="https://code.highcharts.com.cn/highcharts/modules/exporting.js"></script>
@@ -126,8 +121,46 @@
 <!-- 高德 JS API -->
 <script src="https://webapi.amap.com/loader.js"></script>
 
-<script type="module" src="{% static "js/map.js" %}"></script>
-<script type="module" src="{% static "js/functions.js" %}"></script>
-<script type="module" src="{% static "js/index.js" %}"></script>
+<script src="{% static "js/functions.js" %}"></script>
+<script type="text/javascript">
+    AMapLoader.load({
+        key: '9df8e8cbb1caafdc4f6f5d9fc0357f2b', //首次调用load必须填写key
+        version: '2.0',     //JSAPI 版本号
+        plugins: ['AMap.Geolocation']  //同步加载的插件列表
+    }).then((AMap) => {
+        AMap.plugin('AMap.Geolocation', function () {
+            var geolocation = new AMap.Geolocation({
+                // 是否使用高精度定位，默认：true
+                enableHighAccuracy: false,
+                // 设置定位超时时间，默认：无穷大
+                timeout: 10000,
+            })
+
+            geolocation.getCurrentPosition(function (status, result) {
+                if (status === 'complete') {
+                    onComplete(result)
+                } else {
+                    onError(result)
+                }
+            });
+
+            function onComplete(data) {
+                let lngLat = data.position.toString();
+                update(lngLat, [nowWeather, hourlyWeather, forecastWeather]);
+                geolocation.getCityInfo(function (status, result) {
+                    if (status === 'complete') {
+                        nowAirQuality(result.adcode);
+                    }
+                });
+            }
+
+            function onError(data) {
+                console.log(data);
+            }
+        });
+    }).catch((e) => {
+        console.error(e);  //加载错误提示
+    });
+</script>
 </body>
 </html>
