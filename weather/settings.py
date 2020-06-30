@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q#84r11uyt4d5v-ay0fn=cn!fv$leaqak@g0(-vey3&m^x3yjq'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.1.107']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -130,7 +130,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {"max_connections": 20},
-            "PASSWORD": "Lyan@831",
+            "PASSWORD": "你的 Redis 密码",
         },
     },
 }
@@ -139,8 +139,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-WEATHER_KEY = '4b6d0125decc42458d63105dce65e123'
-POSITION_KEY = '86f2de380de40e2b30b2cfe6ce088770'
+WEATHER_KEY = '你的高德 Web 服务 API Key'
+POSITION_KEY = '你的和风天气 API Key'
 INFO_API_URLS = {
     'weather': 'https://free-api.heweather.net/s6/weather/{}',
     'air_quality': 'https://free-api.heweather.net/s6/air/{}'

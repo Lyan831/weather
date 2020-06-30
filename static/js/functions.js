@@ -1,7 +1,5 @@
 'use strict'
 var url = 'https://weather.foreverdana.com/';
-// var url = 'http://localhost:8080/';
-// var url = 'http://192.168.1.107:8080/';
 var days = ['今天', '明天', '后天'];
 
 function makePlot(dews, hums, timeStart) {
