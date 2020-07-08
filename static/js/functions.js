@@ -42,7 +42,7 @@ function makePlot(dews, hums, timeStart) {
             name: '温度',
             data: dews,
             pointStart: timeStart,
-            pointInterval: 1 * 3600 * 1000
+            pointInterval: 3600 * 1000
         }],
         xAxis: {
             title: {
@@ -94,7 +94,7 @@ function makePlot(dews, hums, timeStart) {
             name: '湿度',
             data: hums,
             pointStart: timeStart,
-            pointInterval: 1 * 3600 * 1000
+            pointInterval: 3600 * 1000
         }],
         xAxis: {
             title: {
