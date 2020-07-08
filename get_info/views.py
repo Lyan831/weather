@@ -23,7 +23,7 @@ def location(request):
     lng_lat = request.GET.get('location')
     location_data, key = None, lng_lat
     if not lng_lat:
-        location_data = {'code': '500'}
+        location_data = {'status': '500'}
     else:
         location_data = cache.get(key)
     if not location_data:
