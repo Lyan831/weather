@@ -1,13 +1,12 @@
 'use strict'
-var url = 'https://weather.foreverdana.com/';
-// var url = 'http://localhost:8080/';
-// var url = 'http://192.168.1.107:8080/';
+// var url = 'https://weather.foreverdana.com/';
+var url = 'http://localhost:8080/';
+// var url = 'http://192.168.5.81:8080/';
 var days = ['今天', '明天', '后天'];
 
 function makePlot(dews, hums, timeStart) {
     dews = dews.map(x => Number(x));
     hums = hums.map(x => Number(x));
-    console.log(dews);
     Highcharts.setOptions({
         colors: ['#50B432'],
         credits: {
@@ -130,6 +129,20 @@ function makePlot(dews, hums, timeStart) {
     });
 }
 
+function nowLocation(LngLat) {
+    $.getJSON(
+        url + 'location',
+        {
+            location: LngLat
+        },
+        function (data) {
+            if (data.code == '200') {
+                $('#pos').html(data.location[0].adm2 + '&nbsp;' + data.location[0].name).text();
+            }
+        }
+    )
+}
+
 function nowWeather(lngLat) {
     $.getJSON(
         url + 'weather/now/',
@@ -137,9 +150,8 @@ function nowWeather(lngLat) {
             location: lngLat
         },
         function (data) {
-            if (data.status === 'ok') {
-                $('#pos').html(data.basic.parent_city + '&nbsp;' + data.basic.location).text();
-                $('#number').text(data.now.tmp);
+            if (data.code === '200') {
+                $('#number').text(data.now.temp);
                 $('#nav, #tmp').animate({
                     opacity: '1.0'
                 });
@@ -150,17 +162,17 @@ function nowWeather(lngLat) {
     );
 }
 
-function nowAirQuality(adcode) {
+function nowAirQuality(LngLat) {
     $.getJSON(
         url + 'air_quality/now/',
         {
-            location: adcode
+            location: LngLat
         },
         function (data) {
-            if (data.status === 'ok') {
-                $('#pm25').text(data.air_now_city.pm25);
-                $('#pm10').text(data.air_now_city.pm10);
-                $('#aqi').text(data.air_now_city.aqi);
+            if (data.code === '200') {
+                $('#pm25').text(data.now.pm2p5);
+                $('#pm10').text(data.now.pm10);
+                $('#aqi').text(data.now.aqi);
                 $('#air-quality').animate({
                     opacity: 1.0
                 });
@@ -173,23 +185,23 @@ function nowAirQuality(adcode) {
 
 function forecastWeather(lngLat) {
     $.getJSON(
-        url + 'weather/forecast/',
+        url + 'weather/3d/',
         {
             location: lngLat
         },
         function (data) {
-            if (data.status === 'ok') {
+            if (data.code === '200') {
                 let forecast = $('.forecast');
-                let daily = data.daily_forecast;
+                let daily = data.daily;
                 for (let i = 0; i < forecast.length; i++) {
                     let ithDay = daily[i];
-                    let weatherChange = ithDay.cond_txt_d + (ithDay.cond_txt_d === ithDay.cond_txt_n ? '' : '转' + ithDay.cond_txt_n);
+                    let weatherChange = ithDay.textDay + (ithDay.textDay === ithDay.textNight ? '' : '转' + ithDay.textNight);
                     $(forecast.get(i)).find('.date').text(days[i] + ' • ' + weatherChange);
                     $(forecast.get(i)).find('.tmp-range').text(
-                        daily[i].tmp_min
+                        daily[i].tempMax
                         + '°'
                         + '/'
-                        + daily[i].tmp_max
+                        + daily[i].tempMin
                         + '°'
                     );
                 }
@@ -205,17 +217,17 @@ function forecastWeather(lngLat) {
 
 function hourlyWeather(lngLat) {
     $.getJSON(
-        url + 'weather/hourly/',
+        url + 'weather/24h/',
         {
             location: lngLat
         },
         function (data) {
-            if (data.status === 'ok') {
+            if (data.code === '200') {
                 let hourly = data.hourly;
-                let dews = [], hums = [], timeStart = new Date(hourly[0].time).getTime();
+                let dews = [], hums = [], timeStart = new Date(hourly[0].fxTime).getTime();
                 for (const detail of hourly) {
                     dews.push(detail.dew);
-                    hums.push(detail.hum);
+                    hums.push(detail.humidity);
                 }
                 makePlot(dews, hums, timeStart);
             } else {

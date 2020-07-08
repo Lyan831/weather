@@ -20,6 +20,6 @@ import get_info
 urlpatterns = [
     #    path('admin/', admin.site.urls),
     path('', get_info.views.index),
-    path('adcode/', get_info.views.location),
+    path('location/', get_info.views.location),
     path('<str:query_type>/<str:duration>/', get_info.views.he_feng_query)
 ]

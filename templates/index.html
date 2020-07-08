@@ -124,7 +124,7 @@
 <script src="{% static "js/functions.js" %}"></script>
 <script type="text/javascript">
     AMapLoader.load({
-        key: '9df8e8cbb1caafdc4f6f5d9fc0357f2b', //首次调用load必须填写key
+        key: '', //首次调用load必须填写key
         version: '2.0',     //JSAPI 版本号
         plugins: ['AMap.Geolocation']  //同步加载的插件列表
     }).then((AMap) => {
@@ -146,12 +146,7 @@
 
             function onComplete(data) {
                 let lngLat = data.position.toString();
-                update(lngLat, [nowWeather, hourlyWeather, forecastWeather]);
-                geolocation.getCityInfo(function (status, result) {
-                    if (status === 'complete') {
-                        nowAirQuality(result.adcode);
-                    }
-                });
+                update(lngLat, [nowLocation, nowWeather, nowAirQuality,hourlyWeather, forecastWeather]);
             }
 
             function onError(data) {

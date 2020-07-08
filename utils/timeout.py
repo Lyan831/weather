@@ -3,12 +3,19 @@ from datetime import datetime, timedelta
 from weather.settings import CACHES_TIMEOUT
 
 
-
-def get_timeout(duration, update_time, format='%Y-%m-%d %H:%M'):
+def get_timeout(duration=None, update_time=None, format='%Y-%m-%dT%H:%M%z'):
     timeout = 0
-    if duration != 'forecast':
-        timeout = CACHES_TIMEOUT[duration]
+    if not (duration or update_time):
+        timeout = CACHES_TIMEOUT['location']
+    elif duration == '24h' or duration == '3d':
+        last_update = datetime.strptime(update_time[:19] + update_time[20:], format)
+        last_update += last_update.tzinfo.utcoffset(last_update)
+        if duration == '3d':
+            next_update = (last_update + timedelta(hours=1)).replace(minute=0)
+            timeout = int(next_update.timestamp() - datetime.utcnow().timestamp())
+        else:
+            next_update = (last_update + timedelta(hours=1, minutes=2))
+            timeout = int(next_update.timestamp() - datetime.utcnow().timestamp())
     else:
-        next = datetime.strptime(update_time, format) + timedelta(hours=1, minutes=2)
-        timeout = int(next.timestamp() - datetime.utcnow().timestamp())
-    return timeout
+        timeout = CACHES_TIMEOUT[duration]
+        return timeout
