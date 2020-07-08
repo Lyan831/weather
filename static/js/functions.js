@@ -1,7 +1,5 @@
 'use strict'
-// var url = 'https://weather.foreverdana.com/';
 var url = 'http://localhost:8080/';
-// var url = 'http://192.168.5.81:8080/';
 var days = ['今天', '明天', '后天'];
 
 function makePlot(dews, hums, timeStart) {
@@ -44,7 +42,7 @@ function makePlot(dews, hums, timeStart) {
             name: '温度',
             data: dews,
             pointStart: timeStart,
-            pointInterval: 3 * 3600 * 1000
+            pointInterval: 1 * 3600 * 1000
         }],
         xAxis: {
             title: {
@@ -96,7 +94,7 @@ function makePlot(dews, hums, timeStart) {
             name: '湿度',
             data: hums,
             pointStart: timeStart,
-            pointInterval: 3 * 3600 * 1000
+            pointInterval: 1 * 3600 * 1000
         }],
         xAxis: {
             title: {
@@ -136,7 +134,7 @@ function nowLocation(LngLat) {
             location: LngLat
         },
         function (data) {
-            if (data.code == '200') {
+            if (data.code === '200') {
                 $('#pos').html(data.location[0].adm2 + '&nbsp;' + data.location[0].name).text();
             }
         }
