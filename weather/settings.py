@@ -27,7 +27,7 @@ SECRET_KEY = ''
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -130,7 +130,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {"max_connections": 20},
-            "PASSWORD": "你的 Redis 密码",
+            "PASSWORD": "",
         },
     },
 }
@@ -139,21 +139,19 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-WEATHER_KEY = '你的高德 Web 服务 API Key'
-POSITION_KEY = '你的和风天气 API Key'
+WEATHER_KEY = ''
+POSITION_KEY = ''
 INFO_API_URLS = {
-    'weather': 'https://free-api.heweather.net/s6/weather/{}',
-    'air_quality': 'https://free-api.heweather.net/s6/air/{}'
+    'weather': 'https://api.heweather.net/v7/weather/{}',
+    'air_quality': 'https://api.heweather.net/v7/air/{}'
 }
-POSTION_API_URL = 'https://restapi.amap.com/v3/ip'
+POSTION_API_URL = 'https://geoapi.heweather.net/v2/city/lookup/'
 INFO_TIMEOUTS = {
     'weather': 60,
     'air_quality': 60,
-    'forecast': 60,
-    'hourly': 1800,
-    'ip': 3600,
+    '3d': 60,
 }
 CACHES_TIMEOUT = {
     'now': 60,
-    'hourly': 1800,
+    'location': 300,
 }

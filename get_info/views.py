@@ -18,17 +18,23 @@ def index(request):
 
 
 def location(request):
-    ip = request.META.get('HTTP_X_FORWARDED_FOR') if request.META.get('HTTP_X_FORWARDED_FOR') else request.META.get('REMOTE_ADDR')
-    location_data = cache.get(ip)
+    if request.method != 'GET':
+        raise Http404()
+    lng_lat = request.GET.get('location')
+    location_data, key = None, lng_lat
+    if not lng_lat:
+        location_data = {'code': '500'}
+    else:
+        location_data = cache.get(key)
     if not location_data:
         position_req_params = {
-            'key': POSITION_KEY,
-            'ip': ip,
+            'location': WEATHER_KEY,
+            'key': WEATHER_KEY,
+            'range': 'cn',
+            'mode': 'exact'
         }
-        if ip == '127.0.0.1' or ip.startswith('192'):  # Test only
-            position_req_params.pop('ip')
         location_data = json.loads(requests.get(POSTION_API_URL, params=position_req_params).content)
-        cache.set(ip, location_data, timeout=INFO_TIMEOUTS['ip'])
+        cache.set(key, location_data, timeout=get_timeout())
     return JsonResponse(location_data)
 
 
@@ -38,19 +44,19 @@ def he_feng_query(request, query_type, duration):
     pos_info = request.GET.get('location')
     data, key = None, '{}:{}:{}'.format(pos_info ,query_type, duration)
     if not pos_info:
-        data = {'status': '缺少位置参数'}
+        data = {'code': '500'}
     else:
         data = cache.get(key)
     if not data:
         req_params = {'location': pos_info, 'key': WEATHER_KEY}
         r = requests.get(INFO_API_URLS.get(query_type).format(duration), params=req_params)
         if r.status_code == 200:
-            data = json.loads(r.content).get('HeWeather6')[0]
-            if data.get('status') == 'ok':
+            data = json.loads(r.content)
+            if data.get('code') == '200':
                 cache.set(key, data, timeout=get_timeout(
                     duration,
-                    data.get('update').get('utc') if data.get('update') else None
+                    data.get('updateTime')
                 ))
         else:
-            data = {'status': '接口请求失败'}
+            data = {'code': '500'}
     return JsonResponse(data)
