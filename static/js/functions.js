@@ -16,6 +16,9 @@ function makePlot(dews, hums, timeStart) {
                     enabled: false
                 }
             }
+        },
+        global: {
+            useUTC: false
         }
     })
     // 绘制温度折线图
@@ -224,10 +227,10 @@ function hourlyWeather(lngLat) {
                 let hourly = data.hourly;
                 let dews = [], hums = [], timeStart = new Date(hourly[0].fxTime).getTime();
                 for (const detail of hourly) {
-                    dews.push(detail.dew);
+                    dews.push(detail.temp);
                     hums.push(detail.humidity);
                 }
-                makePlot(dews, hums, timeStart);
+                makePlot(dews, hums, timeStart)
             } else {
                 setTimeout(hourlyWeather, 1000, lngLat);
             }

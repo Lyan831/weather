@@ -14,7 +14,7 @@ def get_timeout(duration=None, update_time=None, format='%Y-%m-%dT%H:%M%z'):
             next_update = (last_update + timedelta(hours=1)).replace(minute=0)
             timeout = int(next_update.timestamp() - datetime.utcnow().timestamp())
         else:
-            next_update = (last_update + timedelta(hours=1, minutes=2))
+            next_update = (last_update + timedelta(hours=1, minutes=5))
             timeout = int(next_update.timestamp() - datetime.utcnow().timestamp())
     else:
         timeout = CACHES_TIMEOUT[duration]
